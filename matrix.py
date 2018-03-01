@@ -41,9 +41,9 @@ def ident( matrix ):
     for r in range( len( matrix[0] ) ):
         for c in range( len(matrix) ):
             if r == c:
-                matrix[c][r] = 1
+                matrix[r][c] = 1
             else:
-                matrix[c][r] = 0
+                matrix[r][c] = 0
 
 def scalar_mult( matrix, s ):
     for r in range( len( matrix[0] ) ):

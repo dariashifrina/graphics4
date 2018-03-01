@@ -33,6 +33,21 @@ See the file script for an example of the file format
 """
 def parse_file( fname, points, transform, screen, color ):
     open_file = open(fname, 'r')
-    for line in open_file:
-        print line
+    file_lines = open_file.readlines()
+    for i in range(0,len(file_lines)):
+        if(file_lines[i] == "line\n"):
+            coords = file_lines[i+1].split()
+            add_edge(points, int(coords[0]), int(coords[1]), int(coords[2]), int(coords[3]), int(coords[4]), int(coords[5]))
+        if(file_lines[i] == "display\n"):
+            draw_lines(points, screen, color)
+            display(screen)
+        if(file_lines[i] == "ident\n"):
+            transform = ident(transform)
+        if(file_lines[i] == "scale\n"):
+            scales = file_lines[i+1].split()
+            scale_matrix = [[int(scales[0]), int(scales[1]), int(scales[2])]]
+            matrix_mult(transform, scale_matrix)
+            
+        else:
+            print file_lines[i]
     pass
