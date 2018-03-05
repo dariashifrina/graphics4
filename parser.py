@@ -35,19 +35,38 @@ def parse_file( fname, points, transform, screen, color ):
     open_file = open(fname, 'r')
     file_lines = open_file.readlines()
     for i in range(0,len(file_lines)):
-        if(file_lines[i] == "line\n"):
-            coords = file_lines[i+1].split()
+        if(file_lines[i] == "line\n"): #lines
+            coords = file_lines[i+1].split(" ")
             add_edge(points, int(coords[0]), int(coords[1]), int(coords[2]), int(coords[3]), int(coords[4]), int(coords[5]))
-        if(file_lines[i] == "display\n"):
+        elif(file_lines[i] == "display\n"): #displaying
+            clear_screen(screen)
+            for r in range(len(points)):
+                for c in range(len(points[r])):
+                    points[r][c] = int(points[r][c])
             draw_lines(points, screen, color)
             display(screen)
-        if(file_lines[i] == "ident\n"):
-            transform = ident(transform)
-        if(file_lines[i] == "scale\n"):
-            scales = file_lines[i+1].split()
-            scale_matrix = [[int(scales[0]), int(scales[1]), int(scales[2])]]
-            matrix_mult(transform, scale_matrix)
-            
-        else:
-            print file_lines[i]
-    pass
+        elif(file_lines[i] == "ident\n"): #identity
+            ident(transform)
+        elif(file_lines[i] == "scale\n"): #scaling
+            scales = file_lines[i+1].split(" ")
+            scale_matrix = make_scale(int(scales[0]), int(scales[1]), int(scales[2]))
+            matrix_mult(scale_matrix, transform)
+        elif(file_lines[i] == "move\n"): #moving
+            moves = file_lines[i+1].split(" ")
+            move_matrix = make_translate(int(moves[0]), int(moves[1]), int(moves[2]))
+            matrix_mult(move_matrix, transform)
+        elif(file_lines[i] == "rotate\n"): #rotating
+	    rotations = file_lines[i+1].split(" ")
+	    if rotations[0] == "x": 
+		rot_matrix = make_rotX(int(rotations[1]))
+	    if rotations[0] == "y": 
+		rot_matrix = make_rotY(int(rotations[1]))
+	    if rotations[0] == "z": 
+                rot_matrix = make_rotZ(int(rotations[1]))
+            matrix_mult(rot_matrix, transform)
+        elif(file_lines[i] == "apply\n"): #applying
+            matrix_mult(transform,points)
+        elif(file_lines[i] == "save\n"): #saving
+            save_extension(screen,file_lines[i+1].strip())
+        elif(file_lines[i] == "quit\n"): #quitting
+            break

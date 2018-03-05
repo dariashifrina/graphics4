@@ -1,7 +1,7 @@
 import math
 
 def make_translate( x, y, z ):
-    translate_matrix = [[1, 0, 0, x], [0,1,0,y], [0,0,1,z], [0, 0, 0, 1]] 
+    translate_matrix = [[1, 0, 0, 0], [0,1,0,0], [0,0,1,0], [x, y, z, 1]] 
     return translate_matrix
 
 def make_scale( x, y, z ):
@@ -13,20 +13,20 @@ def make_rotX( theta ):
     anglesin = math.sin(angle)
     anglecos = math.cos(angle)
     rotX_matrix = [[1, 0, 0, 0],[0, anglecos, -1 * anglesin, 0], [0, anglesin, anglecos, 0], [0,0,0,0]]
-    pass
+    return rotX_matrix
 
 def make_rotY( theta ):
     angle = math.radians(theta)
     anglesin = math.sin(angle)
     anglecos = math.cos(angle)
     rotY_matrix = [[anglecos, 0, anglesin, 0],[0,1,0,0],[-1 * anglesin, 0, anglecos, 0], [0,0,0,0]]
-    pass
+    return rotY_matrix
 
 def make_rotZ( theta ):
     angle = math.radians(theta)
     anglesin = math.sin(angle)
     anglecos = math.cos(angle)
-    rotZ_matrix = [[angelcos, -1 * anglesin, 0, 0],[anglesin, anglecos, 0, 0],[0,0,1,0], [0,0,0,1]]
+    rotZ_matrix = [[anglecos, -1 * anglesin, 0, 0],[anglesin, anglecos, 0, 0],[0,0,1,0], [0,0,0,1]]
     return rotZ_matrix
 
 def print_matrix( matrix ):
@@ -41,9 +41,9 @@ def ident( matrix ):
     for r in range( len( matrix[0] ) ):
         for c in range( len(matrix) ):
             if r == c:
-                matrix[r][c] = 1
+                matrix[c][r] = 1
             else:
-                matrix[r][c] = 0
+                matrix[c][r] = 0
 
 def scalar_mult( matrix, s ):
     for r in range( len( matrix[0] ) ):
